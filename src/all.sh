@@ -48,6 +48,11 @@ function install_headers() {
             then
                 cp -r $file $build/include/
             fi
+
+            if [ -d $file ]
+            then
+                cp -r $file $build/include/
+            fi
         done
     done
 }
