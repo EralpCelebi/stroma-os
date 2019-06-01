@@ -5,6 +5,6 @@
 
 void kmain(struct multiboot *mboot_ptr) {
     ttyinit(0);
-    printf("Can is %s", "Gay");
+    printf("Can is %s", "Well");
 }
  
