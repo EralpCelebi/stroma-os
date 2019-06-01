@@ -1,4 +1,4 @@
-arch="i386"
+arch="i686"
 root=$PWD
 build=$PWD/build
 libs=$build/libs
