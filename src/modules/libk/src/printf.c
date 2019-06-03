@@ -39,7 +39,7 @@ void printf(const char* __restrict__ format,...)
 
         while( *traverse != '%' && *traverse != '\0') 
         { 
-            writechar(*traverse);
+            putchar(*traverse);
             traverse++; 
         }
 
@@ -59,7 +59,7 @@ void printf(const char* __restrict__ format,...)
                         if(i<0) 
                         { 
                             i = -i;
-                            writechar('-'); 
+                            putchar('-'); 
                         } 
                         puts(convert(i,10));
                         break; 

@@ -12,7 +12,7 @@ as="nasm"
 kernel="$root/kernel/$arch"
 iso="$build/iso"
 
-modules="tty io libk"
+modules="tty io libk serial"
 includes="../kernel/$arch $modules"
 
 # Reset
@@ -135,13 +135,29 @@ function pack() {
     grub-mkrescue -o os.iso $iso 2> /dev/null
 }
 
+function pack_eltorito() {
+    echo -e "$yellow Packing: $name with $modules $reset"
+    echo -e "$green Copying: menu.lst $reset"
+    cp $kernel/config/menu.lst $iso/boot/grub/menu.lst
+    echo -e "$green Copying: Grub binary $reset"
+    cp $kernel/config/eltorito $iso/boot/grub/eltorito
+    echo -e "$yellow Packing: os.iso $reset"
+    genisoimage -R                              \
+                -b boot/grub/eltorito           \
+                -no-emul-boot                   \
+                -boot-load-size 4               \
+                -A StromaOS                     \
+                -input-charset utf8             \
+                -quiet                          \
+                -boot-info-table                \
+                -o os.iso                       \
+                $iso
+}
 
-#check;
-#compile;
-#link;
-#pack;
 install_headers;
 compile_libs;
 compile_kernel;
 link;
 pack;
+
+#pack_eltorito;
