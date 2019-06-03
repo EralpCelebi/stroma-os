@@ -8,8 +8,6 @@ void kmain(struct multiboot *mboot_ptr) {
     ttyinit(0);
     serialinit(COM1,1);
     setprint(1);
-    printf("Hey %s", "Hey");
-    setprint(0);
-    printf("hey");
+    printf("Hello");
 }
  
