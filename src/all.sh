@@ -132,16 +132,32 @@ function pack() {
     echo -e "Copying: grub.cfg"
     cp $kernel/config/grub.cfg $iso/boot/grub/grub.cfg
     echo -e "$yellow Packing: os.iso $reset"
-    grub-mkrescue -o os.iso $iso 2> /dev/null
+    grub-mkrescue -o os.iso $iso
 }
 
+function pack_eltorito() {
+    echo -e "$yellow Packing: $name with $modules $reset"
+    echo -e "$green Copying: menu.lst $reset"
+    cp $kernel/config/menu.lst $iso/boot/grub/menu.lst
+    echo -e "$green Copying: Grub binary $reset"
+    cp $kernel/config/eltorito $iso/boot/grub/eltorito
+    echo -e "$yellow Packing: os.iso $reset"
+    genisoimage -R                              \
+                -b boot/grub/eltorito           \
+                -no-emul-boot                   \
+                -boot-load-size 4               \
+                -A StromaOS                     \
+                -input-charset utf8             \
+                -quiet                          \
+                -boot-info-table                \
+                -o os.iso                       \
+                $iso
+}
 
-#check;
-#compile;
-#link;
-#pack;
 install_headers;
 compile_libs;
 compile_kernel;
 link;
-pack;
+#pack;
+
+pack_eltorito;
