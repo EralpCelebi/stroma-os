@@ -9,5 +9,7 @@ void kmain(struct multiboot *mboot_ptr) {
     serialinit(COM1,1);
     setprint(1);
     printf("Hello");
+    char a = read_serial();
+    printf("%c",a);
 }
  
