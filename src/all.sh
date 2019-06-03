@@ -12,7 +12,7 @@ as="nasm"
 kernel="$root/kernel/$arch"
 iso="$build/iso"
 
-modules="tty io libk"
+modules="tty io libk serial"
 includes="../kernel/$arch $modules"
 
 # Reset
@@ -132,7 +132,7 @@ function pack() {
     echo -e "Copying: grub.cfg"
     cp $kernel/config/grub.cfg $iso/boot/grub/grub.cfg
     echo -e "$yellow Packing: os.iso $reset"
-    grub-mkrescue -o os.iso $iso
+    grub-mkrescue -o os.iso $iso 2> /dev/null
 }
 
 function pack_eltorito() {
@@ -158,6 +158,6 @@ install_headers;
 compile_libs;
 compile_kernel;
 link;
-#pack;
+pack;
 
-pack_eltorito;
+#pack_eltorito;
