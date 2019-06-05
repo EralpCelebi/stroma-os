@@ -11,8 +11,9 @@ as="nasm"
 
 kernel="$root/kernel/$arch"
 iso="$build/iso"
+ind="independent"
 
-modules="tty io libk serial"
+modules="$arch/tty $ind/io $ind/libk $ind/serial"
 includes="../kernel/$arch $modules"
 
 # Reset
@@ -31,7 +32,7 @@ white='\033[0;37m'        # White
 libldflags=""
 for module in $modules
 do
-    libldflags+=" -l$module "
+    libldflags+=" -l${module##*/} "
 done
 
 ccflags=" -c -fdiagnostics-color=always -std=gnu99 -ffreestanding -O2 -Wall -Wextra -I$build/include/"
@@ -57,7 +58,7 @@ function install_headers() {
     done
 }
 
-function compile_libs() {
+function compile_modules() {
     for module in $modules
     do
         msrc="modules/${module}/src"
@@ -65,7 +66,7 @@ function compile_libs() {
         do
             if [ -e $file ]
             then
-                echo -e "$red Assembling: $module:$file $reset"
+                echo -e "$red Assembling: ${module##*/}:$file $reset"
                 $as $asflags $file
                 #mv "${file%.*}.o" $local/obj/
             fi
@@ -75,19 +76,30 @@ function compile_libs() {
         do
             if [ -e $file ]
             then
-                echo -e "$green Compiling: $module:$file $reset"
+                echo -e "$green Compiling: ${module##*/}:$file $reset"
                 $cc $ccflags $file -o "${file%.*}.o"
                 #$mv "${file%.*}.o" $local/obj/
             fi
         done
 
-        echo -e "$yellow Packing: lib$module.a $reset"
-        $ar rcs lib$module.a $msrc/*.o
-        mv lib$module.a $libs
+        echo -e "$yellow Packing: lib${module##*/}.a $reset"
+        $ar rcs lib${module##*/}.a $msrc/*.o
+        mv lib${module##*/}.a $libs
         mv $msrc/*.o $build/obj/
     done        
 }
 
+function clean() {
+    echo -e "$red Cleaning. $reset"
+    rm $build/obj/*.o
+    rm $build/libs/*.a
+    rm -rf $build/include/*
+    rm $iso/boot/*.bin
+    rm $iso/boot/grub/grub.cfg
+    rm $iso/boot/grub/menu.lst
+    rm $iso/boot/grub/eltorito
+    rm os.iso
+}
 
 function link() {
     echo  -e " ${purple}Linking: $name${reset}"
@@ -135,7 +147,7 @@ function pack() {
     grub-mkrescue -o os.iso $iso 2> /dev/null
 }
 
-function pack_eltorito() {
+function pack_fallback() {
     echo -e "$yellow Packing: $name with $modules $reset"
     echo -e "$green Copying: menu.lst $reset"
     cp $kernel/config/menu.lst $iso/boot/grub/menu.lst
@@ -154,10 +166,11 @@ function pack_eltorito() {
                 $iso
 }
 
+#clean;
 install_headers;
-compile_libs;
+compile_modules;
 compile_kernel;
 link;
 pack;
 
-#pack_eltorito;
+#pack_fallback;
