@@ -13,7 +13,7 @@ kernel="$root/kernel/$arch"
 iso="$build/iso"
 ind="independent"
 
-modules="$arch/tty $ind/io $ind/libk $ind/serial"
+modules="$arch/tty $ind/io $ind/libk $ind/serial $arch/idt $arch/gdt"
 includes="../kernel/$arch $modules"
 
 # Reset
@@ -172,5 +172,5 @@ compile_modules;
 compile_kernel;
 link;
 pack;
-
+   
 #pack_fallback;

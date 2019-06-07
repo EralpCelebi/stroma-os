@@ -40,3 +40,8 @@ void writestr(char* str);
 void ttyscroll();
 void ttynline();
 void ttyclear();
+
+#define TTY0 0
+#define TTY1 1
+#define TTY2 2
+#define TTY3 3

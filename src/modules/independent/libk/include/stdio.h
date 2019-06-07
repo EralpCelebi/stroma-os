@@ -11,3 +11,6 @@ void printf(const char* __restrict__ format, ...);
 void putchar(char c);
 void puts(const char* string);
 void setprint(uint8_t targ);
+
+#define MONITOR 0
+#define SERIAL 1
