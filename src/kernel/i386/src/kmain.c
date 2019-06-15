@@ -11,7 +11,5 @@ void kmain(struct multiboot *mboot_ptr) {
     idtinit();
     ttyinit(TTY0);
     serialinit(COM1,1);
-    asm volatile ("int $0x5");
-    printf("Wow");
 }
  
