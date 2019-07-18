@@ -76,13 +76,17 @@ void ttyinit(uint8_t mode) {
     ttymode = mode;
     head_x = 0;
     head_y = HEIGHT - 1; // NOTE This is done just for the looks :p
-    termcolor = colorpair(lightred,black);
+    termcolor = colorpair(lightblue,black);
     ttyset(mode);
     ttyclear();
 }
 
 void ttychcolor(uint8_t c) {
     termcolor = c;
+}
+
+uint8_t ttygetcolor() {
+    return termcolor;
 }
 
 void putbyte(unsigned char uc, uint8_t color, uint8_t x , uint8_t y) {

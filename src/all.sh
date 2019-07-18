@@ -13,7 +13,7 @@ kernel="$root/kernel/$arch"
 iso="$build/iso"
 ind="independent"
 
-modules="$arch/tty $ind/io $ind/libk $ind/serial $arch/idt $arch/gdt"
+modules="$arch/tty $arch/io $arch/libk $arch/serial $arch/timer $arch/idt $arch/gdt $arch/init"
 includes="../kernel/$arch $modules"
 
 # Reset
@@ -35,8 +35,8 @@ do
     libldflags+=" -l${module##*/} "
 done
 
-ccflags=" -c -fdiagnostics-color=always -std=gnu99 -ffreestanding -O2 -Wall -Wextra -I$build/include/"
-ldflags=" -ffreestanding -O2 -nostdlib -T$kernel/config/linker.ld -L$libs/ -lgcc $libldflags"
+ccflags=" -c -fdiagnostics-color=always -std=gnu99 -ffreestanding -O2 -I$build/include/" # -Wall -Wextra"
+ldflags=" -ffreestanding -nostdlib -T$kernel/config/linker.ld -L$libs/ -lgcc $libldflags"
 asflags=" -felf32 "
 
 function install_headers() {
