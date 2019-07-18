@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <idt.h>
+#include <isr.h>
 #include <gdt.h>
 #include <timer.h>
 #include <init.h>

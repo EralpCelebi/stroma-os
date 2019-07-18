@@ -1,6 +1,8 @@
 #include <idt.h>
 #include <string.h>
 
+// This is mostly from the James' kernel tutorial.
+
 idt_t idt_entries[256];
 idt_ptr_t idt_ptr;
 
@@ -11,6 +13,17 @@ void idtinit() {
     idt_ptr.base  = (uint32_t) &idt_entries;
 
     memset(&idt_entries, 0, sizeof(idt_t)*256);
+    
+    outb(0x20, 0x11);
+    outb(0xA0, 0x11);
+    outb(0x21, 0x20);
+    outb(0xA1, 0x28);
+    outb(0x21, 0x04);
+    outb(0xA1, 0x02);
+    outb(0x21, 0x01);
+    outb(0xA1, 0x01);
+    outb(0x21, 0x0);
+    outb(0xA1, 0x0);
 
     outb(0x20, 0x11);
     outb(0xA0, 0x11);
@@ -82,7 +95,5 @@ void idtgate(int num, uint32_t base, uint16_t sel, uint8_t flags) {
 
    idt_entries[num].sel     = sel;
    idt_entries[num].always0 = 0;
-   // We must uncomment the OR below when we get to using user-mode.
-   // It sets the interrupt gate's privilege level to 3.
-   idt_entries[num].flags   = flags /* | 0x60 */;
+   idt_entries[num].flags   = flags ;
 }
