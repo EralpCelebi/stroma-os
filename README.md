@@ -5,7 +5,7 @@ Stroma OS is a monolithic kernel with an aim of providing a cross-platform and u
 ___
 
 ### · Prerequisites
-* A linux enviroment.
+* A unix enviroment.
 * `grub-mkrescue` or `genisoimage`
 * A `gcc` cross-compiling toolchain.
 * `xorriso`
